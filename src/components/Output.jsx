@@ -1,4 +1,4 @@
-import { Box, useToast , Button, Text} from "@chakra-ui/react";
+import { Box, useToast, Button, Text } from "@chakra-ui/react";
 import theme from "../theme";
 import { getOutput } from "../api";
 import { useState } from "react";
@@ -14,8 +14,8 @@ const Output = ({ editorRef, language }) => {
         setIsLoading(true);
         try {
             const { run: result } = await getOutput(language, code);
-            result.stderr ? setIsError(true) : setIsError(false);
-            isError?setOutput(result.stderr):setOutput(result.output);
+            setOutput(result.output.split("\n"));
+            result.stderr ? setIsError(true) : setIsError(false); 
         } catch (error) {
             console.log(error);
             toast({
@@ -52,10 +52,7 @@ const Output = ({ editorRef, language }) => {
                 color={isError ? colors.red : ""}
             >
                 {
-                    isError?output:output ? 
-                        output.map((line,i)=><Text key={i}>{line}</Text>) 
-                        : 
-                        "Click the 'Run Code' button to see output here"
+                    output ? output.map((line, i) => <Text key={i}>{line}</Text>) : "Click the 'Run Code' button to see output here"
                 }
             </Box>
         </Box>
